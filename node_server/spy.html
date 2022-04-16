@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BEAST_SPY</title>
+</head>
+<body>
+    <div>
+        <p id="log"></p>
+    </div>
+
+    <script>
+        var ws_victim = new WebSocket('wss://localhost:3000');
+
+        function query_victim_server(){
+
+        }
+        
+        let ws = new WebSocket('wss://127.0.0.1:3001');
+        ws.onclose = () => { console.log('socket closed'); }
+        ws.onmessage = (data) => { console.log(data); }
+
+
+        document.getElementById('log').innerText = "Spying for cookie of Victim Server";
+    </script>
+
+</body>
+</html>

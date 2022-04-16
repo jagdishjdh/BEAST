@@ -1,0 +1,54 @@
+Usage Instructions:
+    first you need to setup VM with ubuntu 16.04 to support TLS 1.0 (many other OS will also work but we did on ubuntu 16.04)
+    install nodejs
+    install npm
+    run 'npm install' inside node_server directory
+    run 'node victim.js' to start victim server with TLS 1.0
+    open 'https://localhost:3000' in browser
+
+    The packet_sniffer part (main part) of the spy is incomplete which has to actually sniff packets
+    to get ciphertext and then implement the steps described in paper.
+
+
+Setting up TLS 1.0 environment:
+    installed ubuntu 16.04 with firefox version 79.0
+    enabled TLS 1.0 in browser
+
+    created a server (victim server) in python to support TLS 1.0
+
+Generating self certificate for TLS:
+    openssl genrsa -out key.pem
+    openssl req -new -key key.pem -out csr.pem
+    openssl x509 -req -days 9999 -in csr.pem -signkey key.pem -out cert.pem
+    rm csr.pem
+
+
+
+Our setup:
+    Victim Server:  server 'V' to which client is talking with TLS 1.0
+        Serves get request and sets cookie
+        Accept websocket connections
+        
+    Spy Server:     server 'S' who wants to get cookie of client for victim server
+        Has power of eavesdropping network
+        Serves spy_webpage
+        Communicate with spy_webpage to make chosen plaintext request to 'V'
+
+    Spy website:    which will make chosen plaintext query to the victim server 'V'
+        Make request to victim server 'V'
+
+
+Difficulties:
+    Same-Origin-policy: Our Spy and Victim both are on localhost so their origin is same hence 
+        spy can make request to victim's server
+    
+
+
+Create TLS 1.0 server that sets cookie
+	
+	Ubuntu 20.04 not allowing use TLS v1.0: 
+		https://github.com/keenlabs/KeenClient-Python/issues/161
+		https://github.com/SoftEtherVPN/SoftEtherVPN/issues/1358
+
+	Followed this article to create server:
+		https://stackoverflow.com/questions/63226614/how-to-make-a-tls-connection-using-python
